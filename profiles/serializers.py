@@ -15,6 +15,12 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class PutUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("id", "username", "first_name", "last_name", "email")
+
+
 class UserTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)

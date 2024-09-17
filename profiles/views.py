@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 
 from .models import CustomUser
-from .serializers import UserSerializer, UserTokenSerializer
+from .serializers import UserSerializer, UserTokenSerializer, PutUserSerializer
 
 
 class ProfileView(APIView):
@@ -23,7 +23,7 @@ class ProfileView(APIView):
     def put(self, request):
         user = request.user
         query = CustomUser.objects.get(pk=user.id)
-        serializer = UserSerializer(query, data=request.data)
+        serializer = PutUserSerializer(query, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -37,7 +37,6 @@ class CreateProfileView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            print(user)
             token, created = Token.objects.get_or_create(user=user)
             response_data = {
                 'user_id': user.id,
